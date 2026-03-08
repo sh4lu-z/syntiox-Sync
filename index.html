@@ -38,12 +38,11 @@
         </div>
 
         <div id="pair-view" class="view-section">
-            <div style="text-align: left; margin-bottom: 5px; font-size: 0.75rem; color: var(--text-mute); margin-left: 5px;">PHONE NUMBER</div>
-            <input type="text" class="aura-input" placeholder="947xxxxxxxx" id="phone">
-            
-            <button class="action-btn" onclick="startPairing()" id="pair-btn">
-                GET PAIRING CODE <i class="fa-solid fa-arrow-right"></i>
-            </button>
+            <div style="text-align: left; margin-bottom: 5px; font-size: 0.75rem; color: var(--text-mute); margin-left: 5px;">SELECT COUNTRY & NUMBER</div>
+               <input type="tel" class="aura-input" id="phone"> 
+                       <button class="action-btn" onclick="validateAndPair()" id="pair-btn">
+                         GET PAIRING CODE <i class="fa-solid fa-arrow-right"></i>
+                      </button>
             <div id="code-result" class="code-res">...</div>
         </div>
 
