@@ -1,4 +1,5 @@
 const CONFIG = {
-    BACKEND_URL: "https://uptight-ketti-chamimusic-3cce977f.koyeb.app", // මෙතන කොමාව අනිවාර්යයි
+
+    BACKEND_URL: import.meta.env.VITE_BACKEND_URL || "https://fallback-url.com", 
     API_BASE: window.location.origin
 };
