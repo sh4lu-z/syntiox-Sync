@@ -97,3 +97,14 @@ body {
 .nav-dock {
     margin-bottom: 30px; /* Copyright එකට උඩින් තියන්න */
 }
+
+
+/* Copy බටන් එකක් වුණාම පෙනුම */
+#pair-btn:not(:disabled) {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#pair-btn:not(:disabled):active {
+    transform: scale(0.95); /* ඔබද්දී පොඩ්ඩක් ඇතුළට යන ලස්සනක් */
+}
