@@ -3,39 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AURA | DEVELOPER CONSOLE</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Outfit:wght@600&display=swap" rel="stylesheet">
+    <title>AURA | DEV CONSOLE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/style.css">
     <style>
-        .dev-terminal {
-            background: #111; border: 1px solid #333; padding: 15px; border-radius: 10px;
-            font-family: monospace; color: #0f0; text-align: left; height: 200px; overflow-y: auto; margin-bottom: 20px;
-        }
-        .dev-btn { width: auto; padding: 10px 20px; font-size: 0.8rem; background: #333; color: #fff; display: inline-block; margin: 5px; }
+        .json-view { text-align: left; background: #111; padding: 15px; border-radius: 10px; color: #4ade80; font-family: monospace; font-size: 0.8rem; height: 300px; overflow: auto; border: 1px solid #333; margin-top: 15px; white-space: pre-wrap; }
     </style>
 </head>
 <body>
     <div class="mesh-bg"></div>
-    
     <div class="aura-card">
-        <h1><i class="fa-solid fa-code"></i> DEV TOOLS</h1>
-        <p class="sub-text">System Diagnostics & Logs</p>
+        <h1><i class="fa-solid fa-code"></i> DEV API TOOL</h1>
+        <p class="sub-text">Fetch MongoDB Session Data</p>
 
-        <div class="dev-terminal" id="console-output">
-            > System Initialized...<br>
-            > Waiting for commands...
+        <div style="text-align: left; margin-bottom: 20px;">
+            <label style="font-size: 0.7rem; color: #888;">PHONE NUMBER</label>
+            <input type="text" id="dev-phone" class="aura-input" placeholder="947xxxxxxxx">
+            
+            <label style="font-size: 0.7rem; color: #888;">SESSION ID</label>
+            <input type="text" id="dev-session" class="aura-input" placeholder="sz-MD_OTQ...">
         </div>
 
-        <div style="display: flex; flex-wrap: wrap; justify-content: center;">
-            <button class="action-btn dev-btn" onclick="checkServerStatus()">PING SERVER</button>
-            <button class="action-btn dev-btn" onclick="clearLocalData()">CLEAR CACHE</button>
-            <button class="action-btn dev-btn" onclick="testDB()">TEST MONGODB</button>
-        </div>
+        <button class="action-btn" onclick="fetchSessionData()">
+            <i class="fa-solid fa-search"></i> FETCH DATA
+        </button>
+
+        <div id="output" class="json-view">// Results will appear here...</div>
 
         <br>
-        <a href="../index.html" class="nav-btn" style="justify-content: center; background: rgba(255,255,255,0.1);">
-            <i class="fa-solid fa-arrow-left"></i> Back to Gateway
+        <a href="../index.html" class="nav-btn" style="justify-content: center;">
+            <i class="fa-solid fa-arrow-left"></i> Back to Home
         </a>
     </div>
 
