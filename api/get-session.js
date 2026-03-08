@@ -1,35 +1,25 @@
 const { MongoClient } = require('mongodb');
 
-let cachedClient = null;
-let cachedDb = null;
-
 async function connectToDatabase() {
-    if (cachedClient && cachedDb) {
-        return { client: cachedClient, db: cachedDb };
-    }
-    // Vercel Environment Variable එකෙන් URL එක ගන්නවා
     const client = new MongoClient(process.env.MONGODB_URI);
     await client.connect();
-    const db = client.db('test'); // Screenshot එකේ විදිහට DB Name එක 'test'
-    cachedClient = client;
-    cachedDb = db;
+    // Screenshot එකේ විදිහට උඹේ database නම 'test'
+    const db = client.db('test'); 
     return { client, db };
 }
 
 module.exports = async (req, res) => {
-    // CORS Headers (ඕනම තැනක ඉඳන් Access කරන්න පුළුවන් වෙන්න)
-    res.setHeader('Access-Control-Allow-Credentials', true);
+    // 1. CORS සහ Headers (JSON ෆයිල් එකක් විදිහට යවන්න හදන්නේ)
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,POST');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Content-Type', 'application/json');
 
     if (req.method === 'OPTIONS') {
-        res.status(200).end();
-        return;
+        return res.status(200).end();
     }
 
     if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Method Not Allowed. Use POST.' });
+        return res.status(405).json({ error: 'Use POST method' });
     }
 
     try {
@@ -41,21 +31,44 @@ module.exports = async (req, res) => {
 
         const { db } = await connectToDatabase();
 
-        // MongoDB එකේ 'sessions' table එකෙන් data හොයනවා
+        // 2. Database එකෙන් අදාළ Session එක හොයනවා
         const session = await db.collection('sessions').findOne({
             sessionId: sessionId,
             phoneNumber: phoneNumber
         });
 
         if (!session) {
-            return res.status(404).json({ success: false, message: "Session not found!" });
+            return res.status(404).json({ success: false, message: "No matching session found" });
         }
 
-        // සම්පූර්ණ JSON එකම රිටන් කරනවා
-        return res.status(200).json(session);
+        // ============================================================
+        // 3. CREDS.JSON එක හදන මැජික් එක (Data Merging Logic)
+        // ============================================================
+        
+        // Database එකේ 'creds' ඇතුලේ තියෙන ඒවා (noiseKey, advSecretKey, etc.)
+        // සහ එළියේ තියෙන ඒවා (me, platform, signalIdentities) එකට එකතු කරනවා.
+        
+        const finalCredsJson = {
+            ...session.creds,   // creds object එකේ තියෙන ඔක්කොම එළියට ගන්නවා
+            
+            // මේ ටික Database එකේ creds එකෙන් එළියේ තියෙන්නේ, ඒවත් මේකටම දානවා
+            me: session.me,
+            signalIdentities: session.signalIdentities,
+            platform: session.platform,
+            myAppStateKeyId: session.myAppStateKeyId,
+            
+            // සමහර වෙලාවට routingInfo එකේ තියෙන timestamp එක එළියට ගන්න ඕන වෙයි
+            lastAccountSyncTimestamp: session.lastAccountSyncTimestamp || (session.routingInfo && session.routingInfo.lastAccountSyncTimestamp),
+            
+            // අවශ්‍ය නම් routingInfo එකත් දාන්න
+            routingInfo: session.routingInfo
+        };
+
+        // 4. දැන් මේක කෙලින්ම යවන්නේ creds.json ෆයිල් එකේ structure එකටමයි
+        return res.status(200).json(finalCredsJson);
 
     } catch (error) {
-        console.error("DB Error:", error);
+        console.error("Server Error:", error);
         return res.status(500).json({ error: "Internal Server Error" });
     }
 };
