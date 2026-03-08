@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AURA SESSION | GATEWAY</title>
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/6062/6062646.png">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+    <div class="mesh-bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+    <div id="toast-container"></div>
+
+    <div class="aura-card" id="tilt-card">
+        <h1>AURA GATEWAY</h1>
+        <p class="sub-text">Secure Session Bridge</p>
+        
+        <div class="toggle-box">
+            <button class="t-btn active" onclick="switchTab('qr')">QR SCAN</button>
+            <button class="t-btn" onclick="switchTab('pair')">PAIR CODE</button>
+        </div>
+
+        <div id="qr-view" class="view-section active">
+            <div id="qr-container" class="qr-box">
+                <i class="fa-solid fa-qrcode fa-3x" style="color:#000; opacity:0.2;"></i>
+                <p style="color:#000; font-size:0.8rem; margin-top:10px;">Click Start to Generate</p>
+            </div>
+            <button class="action-btn" onclick="startQR()" id="qr-btn">
+                <i class="fa-solid fa-play"></i> START SESSION
+            </button>
+        </div>
+
+        <div id="pair-view" class="view-section">
+            <div style="text-align: left; margin-bottom: 5px; font-size: 0.75rem; color: var(--text-mute); margin-left: 5px;">PHONE NUMBER</div>
+            <input type="text" class="aura-input" placeholder="947xxxxxxxx" id="phone">
+            
+            <button class="action-btn" onclick="startPairing()" id="pair-btn">
+                GET PAIRING CODE <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            <div id="code-result" class="code-res">...</div>
+        </div>
+
+        <div id="success-msg" style="display:none; margin-top:15px; padding:10px; background:rgba(37, 211, 102, 0.1); border:1px solid #25D366; border-radius:10px;">
+            <i class="fa-brands fa-whatsapp" style="color:#25D366; font-size:1.5rem; margin-bottom:5px;"></i>
+            <div style="color:#fff; font-size:0.9rem; font-weight:bold;">SESSION SENT!</div>
+        </div>
+        
+        <div id="user-stats" style="margin-top:20px; font-size:0.8rem; color:var(--text-mute); display:none;">
+            Loading DB Data...
+        </div>
+    </div>
+
+    <div class="nav-dock">
+        <a href="https://sh4lu-z.vercel.app/" class="nav-btn web"><i class="fa-solid fa-globe"></i> Main</a>
+        <div style="width: 1px; background: rgba(255,255,255,0.2);"></div>
+        <a href="dev/dev.html" class="nav-btn dev-opt"><i class="fa-solid fa-terminal"></i> Dev Tools</a>
+    </div>
+
+    <div class="copyright">SH4LU_Z | SYSTEM SECURED</div>
+
+    <script src="config.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/data-loader.js"></script>
+</body>
+</html>
