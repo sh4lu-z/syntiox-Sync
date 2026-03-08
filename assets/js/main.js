@@ -4,17 +4,19 @@ const socket = io(CONFIG.BACKEND_URL);
 
 // --- 1. ලයිබ්‍රරි එක Initialize කරන කොටස (ෆයිල් එක මුලටම දාන්න) ---
 let iti; 
+// assets/js/main.js
+
 document.addEventListener("DOMContentLoaded", () => {
     const phoneInput = document.querySelector("#phone");
     if (phoneInput) {
         iti = window.intlTelInput(phoneInput, {
-            initialCountry: "lk", // මුලින්ම ලංකාව පෙන්වන්න
+            initialCountry: "lk",
             separateDialCode: true,
+            dropdownContainer: document.body, 
             utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js",
         });
     }
 });
-
 // --- Toast Notification System ---
 function showToast(message, type = 'info') {
     const container = document.getElementById('toast-container');
