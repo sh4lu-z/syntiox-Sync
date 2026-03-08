@@ -1,7 +1,7 @@
 // assets/js/main.js
 
 const socket = io(CONFIG.BACKEND_URL);
-let isTiltEnabled = true; // 3D Tilt එක පාලනය කරන Flag එක
+let isTiltEnabled = true; 
 
 // --- 1. ලයිබ්‍රරි එක Initialize කරන කොටස ---
 let iti; 
@@ -76,7 +76,7 @@ function startQR() {
 socket.on('qr', (data) => {
     isTiltEnabled = false; // 🔥 QR එක ආව ගමන් හෙලවෙන එක නවත්තනවා
     const card = document.getElementById('tilt-card');
-    if(card) card.style.transform = "none"; // කාඩ් එක flat කරනවා
+    if(card) card.style.transform = "none"; 
 
     const qrContainer = document.getElementById('qr-container');
     qrContainer.innerHTML = ""; 
@@ -161,7 +161,7 @@ socket.on('error', (data) => {
 // --- 3D Tilt Effect (අලුත් කරපු කොටස) ---
 document.addEventListener('mousemove', (e) => {
     const card = document.getElementById('tilt-card');
-    // මෙතන 'isTiltEnabled' එක true නම් විතරක් හෙලවෙනවා
+
     if(card && isTiltEnabled) { 
         const x = (window.innerWidth / 2 - e.pageX) / 30;
         const y = (window.innerHeight / 2 - e.pageY) / 30;
