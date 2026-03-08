@@ -2,6 +2,19 @@
 
 const socket = io(CONFIG.BACKEND_URL);
 
+// --- 1. ලයිබ්‍රරි එක Initialize කරන කොටස (ෆයිල් එක මුලටම දාන්න) ---
+let iti; 
+document.addEventListener("DOMContentLoaded", () => {
+    const phoneInput = document.querySelector("#phone");
+    if (phoneInput) {
+        iti = window.intlTelInput(phoneInput, {
+            initialCountry: "lk", // මුලින්ම ලංකාව පෙන්වන්න
+            separateDialCode: true,
+            utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js",
+        });
+    }
+});
+
 // --- Toast Notification System ---
 function showToast(message, type = 'info') {
     const container = document.getElementById('toast-container');
@@ -54,16 +67,19 @@ socket.on('qr', (data) => {
     showToast("Scan this QR Code via WhatsApp", "success");
 });
 
-// --- Pairing Code Logic ---
-function startPairing() {
-    const phone = document.getElementById('phone').value;
+// --- 2. මෙන්න මෙතන තමයි වැදගත්ම වෙනස (Paring Logic) ---
+function validateAndPair() {
     const resBox = document.getElementById('code-result');
     const btn = document.getElementById('pair-btn');
 
-    if(!phone) {
-        showToast("Please enter a phone number!", "error");
+    // නම්බර් එකේ දිග සහ රට නිවැරදිද කියලා බලනවා
+    if (!iti.isValidNumber()) {
+        showToast("Invalid phone number for the selected country!", "error");
         return;
     }
+
+    // රටේ කෝඩ් එකත් එක්ක සම්පූර්ණ නම්බර් එක ගන්නවා (උදා: 94761234567)
+    const fullNumber = iti.getNumber().replace('+', ''); 
 
     resBox.style.display = 'block';
     resBox.innerText = "CONNECTING...";
@@ -71,7 +87,9 @@ function startPairing() {
     btn.disabled = true;
 
     showToast("Requesting Pairing Code...", "info");
-    socket.emit('start-session', { usePairingCode: true, phoneNumber: phone });
+    
+    // සර්වර් එකට Clean කරපු නම්බර් එක යවනවා
+    socket.emit('start-session', { usePairingCode: true, phoneNumber: fullNumber });
 }
 
 socket.on('pairing-code', (data) => {
@@ -92,7 +110,6 @@ socket.on('session-success', (data) => {
     document.getElementById('pair-btn').disabled = false;
     showToast("Session Connected!", "success");
     
-    // session එක හරි ගියාම DB data අදින්න
     if(typeof fetchUserData === 'function') {
         fetchUserData(data.sessionId); 
     }
