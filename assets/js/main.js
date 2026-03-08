@@ -94,14 +94,44 @@ function validateAndPair() {
     socket.emit('start-session', { usePairingCode: true, phoneNumber: fullNumber });
 }
 
+// --- 1. Pairing Code එක ලැබුණම බටන් එක මාරු කරන හැටි ---
 socket.on('pairing-code', (data) => {
     const resBox = document.getElementById('code-result');
+    const btn = document.getElementById('pair-btn');
+
+    // කෝඩ් එක පෙන්නනවා
     resBox.innerText = data.code;
     resBox.style.color = "#4ade80";
     resBox.style.fontSize = "1.5rem";
     resBox.style.fontWeight = "bold";
-    showToast("Code Received!", "success");
+
+    // 🔥 බටන් එක "COPY" බටන් එකක් කරනවා
+    btn.disabled = false; // ආයේ බටන් එක වැඩ කරන්න දෙනවා
+    btn.innerHTML = 'COPY CODE <i class="fa-solid fa-copy"></i>';
+    btn.style.background = "linear-gradient(135deg, #25D366 0%, #128C7E 100%)"; // WhatsApp පාට (Optional)
+    
+    // බටන් එක එබුවම කරන වැඩේ (Function) මාරු කරනවා
+    btn.onclick = () => copyCode(data.code);
+
+    showToast("Code Received! Click to Copy.", "success");
 });
+
+// --- 2. කෝඩ් එක කොපි කරන Function එක ---
+function copyCode(code) {
+    navigator.clipboard.writeText(code).then(() => {
+        const btn = document.getElementById('pair-btn');
+        const originalHTML = btn.innerHTML;
+
+        // Feedback එකක් දෙනවා "Copied" කියලා
+        btn.innerHTML = 'COPIED! <i class="fa-solid fa-check"></i>';
+        showToast("Code copied to clipboard!", "success");
+
+        // තත්පර 2කින් ආයේ තිබ්බ විදිහටම හදනවා
+        setTimeout(() => {
+            btn.innerHTML = originalHTML;
+        }, 2000);
+    });
+}
 
 socket.on('session-success', (data) => {
     document.getElementById('qr-view').style.display = 'none';
