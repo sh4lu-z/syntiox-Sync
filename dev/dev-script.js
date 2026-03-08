@@ -1,33 +1,29 @@
-// dev/dev-script.js
+async function fetchSessionData() {
+    const phone = document.getElementById('dev-phone').value;
+    const session = document.getElementById('dev-session').value;
+    const output = document.getElementById('output');
 
-const terminal = document.getElementById('console-output');
+    if(!phone || !session) {
+        output.innerHTML = "<span style='color:#f87171'>Error: Phone and Session ID required!</span>";
+        return;
+    }
 
-function log(msg, color = '#0f0') {
-    terminal.innerHTML += `<div style="color:${color}">> ${msg}</div>`;
-    terminal.scrollTop = terminal.scrollHeight;
-}
+    output.innerHTML = "Fetching from MongoDB...";
 
-function checkServerStatus() {
-    log("Pinging " + CONFIG.BACKEND_URL + "...", "#fbbf24");
-    fetch(CONFIG.BACKEND_URL)
-        .then(res => {
-            if(res.ok) log("Server is ONLINE (200 OK)", "#4ade80");
-            else log("Server Error: " + res.status, "#f87171");
-        })
-        .catch(err => log("Connection Failed!", "#f87171"));
-}
+    try {
+        // මේ තියෙන්නේ API Call එක
+        const res = await fetch(`${CONFIG.API_BASE}/api/get-session`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sessionId: session, phoneNumber: phone })
+        });
 
-function clearLocalData() {
-    localStorage.clear();
-    sessionStorage.clear();
-    log("Local Cache Cleared.", "#60a5fa");
-}
+        const data = await res.json();
+        
+        // ලස්සනට JSON එක පෙන්නනවා
+        output.innerHTML = JSON.stringify(data, null, 4);
 
-function testDB() {
-    log("Testing MongoDB Connection...", "#fbbf24");
-    // Simulating a check
-    setTimeout(() => {
-        if(CONFIG.API_URL) log("API Endpoint Configured.", "#4ade80");
-        else log("API Config Missing!", "#f87171");
-    }, 1000);
+    } catch (err) {
+        output.innerHTML = "<span style='color:#f87171'>API Error: " + err.message + "</span>";
+    }
 }
