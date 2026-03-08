@@ -49,50 +49,51 @@ p.sub-text{color:var(--text-mute);font-size:.85rem;margin-bottom:20px}
 @keyframes fadeOut { to { transform: translateY(-20px); opacity: 0; } }
 
 
-/* 1. Country Input එක කාඩ් එකේ හැඩයට ලොක් කිරීම */
-.iti {
-    width: 100% !important;
-    display: block !important;
-    margin-bottom: 15px;
+/* 1. ලිස්ට් එකේ පෙනුම තීම් එකට මැච් කිරීම */
+.iti--container {
+    z-index: 9999 !important; /* හැමදේටම උඩින් පේන්න */
 }
 
-/* 2. රටවල් ලිස්ට් එක (Dropdown) කාඩ් එක උඩින් පාවෙන්න හැදීම */
 .iti__country-list {
-    position: absolute !important;
-    z-index: 9999 !important; /* අනිත් හැමදේටම උඩින් පේන්න */
-    background-color: #111827 !important; /* කළු පාටට හුරු ඩාර්ක් තීම් එක */
+    background-color: #111827 !important; /* Aura තීම් එකේ කළු පාට */
     color: #fff !important;
     border: 1px solid #374151 !important;
     border-radius: 12px !important;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.6); /* ලස්සන හෙවනැල්ලක් */
-    max-height: 200px; /* ලිස්ට් එක ගොඩක් දිගට යන්නේ නැතුව scroll වෙන්න */
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8) !important;
+    max-height: 250px !important; /* ලිස්ට් එක දිග වැඩි නොවී scroll වෙන්න */
+    scrollbar-width: thin;
+    scrollbar-color: #374151 #111827;
 }
 
-/* 3. පල්ලෙහා තියෙන Nav Dock එක (Main/Dev) ලොක් කිරීම */
-.nav-dock {
-    position: fixed !important; /* මේක වැදගත්: ස්ක්‍රීන් එකට ලොක් වෙනවා */
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000; /* බටන් ටික හැමවෙලේම පේන්න */
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 10px 20px;
-    border-radius: 50px;
+.iti__country:hover {
+    background-color: #1f2937 !important;
+}
+
+/* 2. Copyright එක යටටම තල්ලු කිරීම */
+body {
+    min-height: 100vh;
     display: flex;
-    gap: 15px;
-    width: fit-content;
+    flex-direction: column;
+    margin: 0;
+    padding-bottom: 20px; /* පතුලේ පොඩි ඉඩක් */
 }
 
-/* 4. මොබයිල් වලටත් හරියන්න මට්ටම් කිරීම */
-@media (max-width: 480px) {
-    .aura-card {
-        margin-top: 50px;
-        width: 95%;
-    }
-    .nav-dock {
-        width: 85%;
-        justify-content: center;
-    }
+/* කාඩ් එක මැදට ගෙන ඒම */
+.aura-card {
+    margin-top: auto;
+    margin-bottom: 20px;
+}
+
+/* Copyright එක අන්තිමට තල්ලු කිරීම */
+.copyright {
+    margin-top: auto;
+    padding: 20px 0;
+    text-align: center;
+    width: 100%;
+    opacity: 0.6;
+}
+
+/* 3. Nav Dock එක ලොක් කිරීම */
+.nav-dock {
+    margin-bottom: 30px; /* Copyright එකට උඩින් තියන්න */
 }
