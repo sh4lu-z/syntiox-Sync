@@ -3,41 +3,219 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AURA | DEV CONSOLE</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600&display=swap" rel="stylesheet">
+    <title>Syntiox Sync | Developer Docs</title>
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/6062/6062646.png">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/style.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <style>
-        .json-view { text-align: left; background: #111; padding: 15px; border-radius: 10px; color: #4ade80; font-family: monospace; font-size: 0.8rem; height: 300px; overflow: auto; border: 1px solid #333; margin-top: 15px; white-space: pre-wrap; }
+        body { font-family: 'Outfit', sans-serif; background-color: #0f172a; color: #e2e8f0; }
+        .code-block { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 15px; overflow-x: auto; font-family: 'Courier New', monospace; font-size: 0.9rem; color: #a5b4fc; position: relative; }
+        .copy-btn { position: absolute; top: 10px; right: 10px; background: #334155; color: #fff; padding: 5px 10px; border-radius: 5px; font-size: 0.75rem; cursor: pointer; transition: 0.3s; }
+        .copy-btn:hover { background: #475569; }
+        .highlight { color: #facc15; font-weight: bold; } /* Yellow for critical parts */
+        .comment { color: #64748b; }
+        .keyword { color: #c084fc; }
+        .string { color: #4ade80; }
+        
+        /* Smooth Scroll */
+        html { scroll-behavior: smooth; }
     </style>
 </head>
-<body>
-    <div class="mesh-bg"></div>
-    <div class="aura-card">
-        <h1><i class="fa-solid fa-code"></i> DEV API TOOL</h1>
-        <p class="sub-text">Fetch MongoDB Session Data</p>
+<body class="antialiased">
 
-        <div style="text-align: left; margin-bottom: 20px;">
-            <label style="font-size: 0.7rem; color: #888;">PHONE NUMBER</label>
-            <input type="text" id="dev-phone" class="aura-input" placeholder="947xxxxxxxx">
-            
-            <label style="font-size: 0.7rem; color: #888;">SESSION ID</label>
-            <input type="text" id="dev-session" class="aura-input" placeholder="sz-MD_OTQ...">
+    <nav class="fixed w-full z-50 top-0 start-0 border-b border-slate-700 bg-slate-900/90 backdrop-blur">
+        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+            <a href="https://syntiox-sync.vercel.app/" class="flex items-center space-x-3">
+                <span class="self-center text-2xl font-semibold whitespace-nowrap text-white">Syntiox<span class="text-indigo-500">Sync</span></span>
+            </a>
+            <div class="flex space-x-4">
+                <a href="#api" class="text-gray-300 hover:text-white transition">API</a>
+                <a href="#config" class="text-gray-300 hover:text-white transition">Config</a>
+                <a href="https://github.com/syntiox" target="_blank" class="text-gray-300 hover:text-white transition"><i class="fa-brands fa-github"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="pt-32 pb-16 px-6 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-cyan-400">
+            Developer Integration Guide
+        </h1>
+        <p class="text-slate-400 text-lg max-w-2xl mx-auto">
+            ඔයාගේ WhatsApp Bot එකට අවශ්‍ය කරන <span class="text-white font-mono">creds.json</span> එක Syntiox Sync හරහා ලබාගන්න.
+            පහත උපදෙස් අනුගමනය කර Session Logout වීම් වලක්වා ගන්න.
+        </p>
+    </section>
+
+    <section id="api" class="max-w-4xl mx-auto px-6 mb-20">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center font-bold">1</div>
+            <h2 class="text-2xl font-bold text-white">Fetch Session (API)</h2>
+        </div>
+        
+        <p class="text-slate-400 mb-4">
+            ඔබේ බොට් එකේ <span class="text-indigo-400 font-mono">connect.js</span> හෝ <span class="text-indigo-400 font-mono">index.js</span> ගොනුවට මෙම කේතය එක් කරන්න.
+            මෙමගින් Vercel සර්වර් එකෙන් Session Data ලබා ගනී.
+        </p>
+
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyToClipboard('code1')">Copy</button>
+            <pre id="code1"><span class="keyword">const</span> axios = <span class="keyword">require</span>(<span class="string">'axios'</span>);
+<span class="keyword">const</span> fs = <span class="keyword">require</span>(<span class="string">'fs-extra'</span>);
+
+<span class="keyword">async function</span> downloadSession() {
+    <span class="keyword">const</span> apiUrl = <span class="string">'https://syntiox-sync.vercel.app/api/get-session'</span>;
+    <span class="keyword">const</span> sessionId = <span class="string">'YOUR_SESSION_ID'</span>; <span class="comment">// e.g., sz-MD_...</span>
+    <span class="keyword">const</span> phoneNumber = <span class="string">'947XXXXXXXX'</span>; 
+
+    <span class="keyword">try</span> {
+        console.log(<span class="string">"⏳ Fetching Session..."</span>);
+        <span class="keyword">const</span> { data } = <span class="keyword">await</span> axios.post(apiUrl, {
+            sessionId: sessionId,
+            phoneNumber: phoneNumber
+        });
+
+        <span class="comment">// Save as creds.json</span>
+        <span class="keyword">await</span> fs.writeJson(<span class="string">'./auth_info/creds.json'</span>, data);
+        console.log(<span class="string">"✅ Session Saved Successfully!"</span>);
+    } <span class="keyword">catch</span> (err) {
+        console.error(<span class="string">"❌ Error:"</span>, err.message);
+    }
+}</pre>
+        </div>
+    </section>
+
+    <section id="config" class="max-w-4xl mx-auto px-6 mb-20">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-10 h-10 rounded-full bg-red-500 flex items-center justify-center font-bold">2</div>
+            <h2 class="text-2xl font-bold text-white">Critical Socket Configuration ⚠️</h2>
         </div>
 
-        <button class="action-btn" onclick="fetchSessionData()">
-            <i class="fa-solid fa-search"></i> FETCH DATA
-        </button>
+        <div class="bg-red-500/10 border border-red-500/30 rounded-lg p-4 mb-6">
+            <p class="text-red-200 text-sm">
+                <i class="fa-solid fa-triangle-exclamation mr-2"></i>
+                <b>වැදගත්:</b> ඔබ Session එක ලබාගත්තේ අපගේ සර්වර් එක හරහා බැවින්, 
+                ඔබේ බොට් එකේ <span class="font-mono bg-black/30 px-1 rounded">makeWASocket</span> සැකසුම් 
+                අපගේ සර්වර් සැකසුම් වලට <span class="underline">100% ක් සමාන</span> විය යුතුය.
+                නැතිනම් Session එක Logout විය හැක.
+            </p>
+        </div>
 
-        <div id="output" class="json-view">// Results will appear here...</div>
+        <p class="text-slate-400 mb-4">
+            පහත කහ පැහැයෙන් දක්වා ඇති කොටස් (<span class="text-yellow-400">browser, syncFullHistory</span>) වෙනස් නොකරන්න.
+        </p>
 
-        <br>
-        <a href="../index.html" class="nav-btn" style="justify-content: center;">
-            <i class="fa-solid fa-arrow-left"></i> Back to Home
-        </a>
-    </div>
+        <div class="code-block">
+            <button class="copy-btn" onclick="copyToClipboard('code2')">Copy</button>
+            <pre id="code2"><span class="keyword">const</span> sock = makeWASocket({
+    version,
+    auth: {
+        creds: state.creds,
+        <span class="comment">// ✅ MUST USE CacheableSignalKeyStore to prevent buffer errors</span>
+        keys: makeCacheableSignalKeyStore(state.keys, pino({ level: <span class="string">"fatal"</span> }).child({ level: <span class="string">"fatal"</span> })),
+    },
+    logger: pino({ level: <span class="string">'silent'</span> }), 
+    printQRInTerminal: <span class="keyword">false</span>,
 
-    <script src="../config.js"></script>
-    <script src="dev-script.js"></script>
+    <span class="comment">// 🔥 CRITICAL MATCHING CONFIGS (DO NOT CHANGE) 🔥</span>
+    <span class="highlight">browser: ["Ubuntu", "Chrome", "20.0.04"],</span> <span class="comment">// Must match server browser</span>
+    <span class="highlight">syncFullHistory: false,</span>                   <span class="comment">// Prevent history sync crash</span>
+    <span class="highlight">markOnlineOnConnect: false,</span>               <span class="comment">// Match server status</span>
+    <span class="highlight">generateHighQualityLinkPreview: true,</span>
+    
+    <span class="comment">// Timeouts to match server stability</span>
+    connectTimeoutMs: 60000, 
+    keepAliveIntervalMs: 10000,
+    retryRequestDelayMs: 5000,
+});</pre>
+        </div>
+    </section>
+
+    <section class="max-w-4xl mx-auto px-6 mb-20">
+        <h2 class="text-xl font-bold text-white mb-4">Complete "bot.js" Template</h2>
+        <div class="code-block" style="max-height: 400px; overflow-y: auto;">
+            <button class="copy-btn" onclick="copyToClipboard('code3')">Copy</button>
+            <pre id="code3"><span class="keyword">require</span>(<span class="string">'dotenv'</span>).config();
+<span class="keyword">const</span> { default: makeWASocket, useMultiFileAuthState, fetchLatestBaileysVersion, makeCacheableSignalKeyStore } = <span class="keyword">require</span>(<span class="string">"@whiskeysockets/baileys"</span>);
+<span class="keyword">const</span> pino = <span class="keyword">require</span>(<span class="string">'pino'</span>);
+<span class="keyword">const</span> fs = <span class="keyword">require</span>(<span class="string">'fs-extra'</span>);
+<span class="keyword">const</span> axios = <span class="keyword">require</span>(<span class="string">'axios'</span>);
+<span class="keyword">const</span> path = <span class="keyword">require</span>(<span class="string">'path'</span>);
+
+<span class="keyword">const</span> { SESSION_ID, PHONE_NUMBER } = process.env;
+<span class="keyword">const</span> authPath = path.join(__dirname, <span class="string">'auth_info'</span>);
+
+<span class="keyword">async function</span> startBot() {
+    <span class="comment">// 1. Download Session if not exists</span>
+    <span class="keyword">if</span> (!fs.existsSync(path.join(authPath, <span class="string">'creds.json'</span>))) {
+        <span class="keyword">try</span> {
+            <span class="keyword">const</span> { data } = <span class="keyword">await</span> axios.post(<span class="string">'https://syntiox-sync.vercel.app/api/get-session'</span>, {
+                sessionId: SESSION_ID,
+                phoneNumber: PHONE_NUMBER
+            });
+            <span class="keyword">await</span> fs.ensureDir(authPath);
+            <span class="keyword">await</span> fs.writeJson(path.join(authPath, <span class="string">'creds.json'</span>), data);
+        } <span class="keyword">catch</span> (e) {
+            console.error(<span class="string">"Session Fetch Error"</span>);
+            process.exit(1);
+        }
+    }
+
+    <span class="comment">// 2. Connect to WhatsApp</span>
+    <span class="keyword">const</span> { state, saveCreds } = <span class="keyword">await</span> useMultiFileAuthState(authPath);
+    <span class="keyword">const</span> { version } = <span class="keyword">await</span> fetchLatestBaileysVersion();
+
+    <span class="keyword">const</span> sock = makeWASocket({
+        version,
+        auth: {
+            creds: state.creds,
+            keys: makeCacheableSignalKeyStore(state.keys, pino({ level: <span class="string">"fatal"</span> }).child({ level: <span class="string">"fatal"</span> })),
+        },
+        logger: pino({ level: <span class="string">'silent'</span> }),
+        
+        <span class="comment">// 👇 IMPORTANT: CONFIGS MATCHING SYNTIOX SERVER 👇</span>
+        browser: [<span class="string">"Ubuntu"</span>, <span class="string">"Chrome"</span>, <span class="string">"20.0.04"</span>],
+        syncFullHistory: <span class="keyword">false</span>,
+        markOnlineOnConnect: <span class="keyword">false</span>,
+        connectTimeoutMs: 60000,
+    });
+
+    sock.ev.on(<span class="string">'creds.update'</span>, saveCreds);
+
+    sock.ev.on(<span class="string">'connection.update'</span>, (update) => {
+        <span class="keyword">const</span> { connection } = update;
+        <span class="keyword">if</span> (connection === <span class="string">'open'</span>) console.log(<span class="string">"✅ Bot Connected!"</span>);
+        <span class="keyword">else if</span> (connection === <span class="string">'close'</span>) setTimeout(startBot, 3000);
+    });
+}
+startBot();</pre>
+        </div>
+    </section>
+
+    <footer class="text-center py-8 text-slate-600 text-sm border-t border-slate-800">
+        <p>Syntiox Sync API • Secured by Vercel & MongoDB</p>
+        <p>© 2026 Syntiox Development</p>
+    </footer>
+
+    <script>
+        function copyToClipboard(elementId) {
+            const code = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.querySelector(`button[onclick="copyToClipboard('${elementId}')"]`);
+                const originalText = btn.innerText;
+                btn.innerText = "Copied!";
+                btn.style.background = "#4ade80";
+                btn.style.color = "#000";
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.style.background = "#334155";
+                    btn.style.color = "#fff";
+                }, 2000);
+            });
+        }
+    </script>
 </body>
 </html>
