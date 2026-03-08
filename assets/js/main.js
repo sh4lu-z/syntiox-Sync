@@ -40,7 +40,7 @@ function startQR() {
     const qrContainer = document.getElementById('qr-container');
     const btn = document.getElementById('qr-btn');
     
-    showToast("Connecting to server...", "info");
+    showToast("Connecting to syntiox sync...", "info");
     qrContainer.innerHTML = '<span class="loader"></span><p style="color:#000; font-size:0.8rem; margin-top:10px;">Loading QR...</p>';
     btn.disabled = true;
 
