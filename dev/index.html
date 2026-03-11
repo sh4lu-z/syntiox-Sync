@@ -165,12 +165,12 @@
         </section>
 
         <section>
-            <h2 class="text-xl font-bold text-white mb-4">🤖 Complete Bot Script Template</h2>
-            <p class="text-slate-400 text-sm mb-4">Copy and paste this into your <code>index.js</code> or <code>bot.js</code>.</p>
-            
-            <div class="code-block" style="max-height: 500px; overflow-y: auto;">
-                <button class="copy-btn" onclick="copy('full-code')">Copy Full Script</button>
-                <pre id="full-code"><span class="f">require</span>(<span class="s">'dotenv'</span>).<span class="f">config</span>();
+    <h2 class="text-xl font-bold text-white mb-4">🤖 Complete Bot Script Template</h2>
+    <p class="text-slate-400 text-sm mb-4">Copy and paste this into your <code>index.js</code> or <code>bot.js</code>.</p>
+    
+    <div class="code-block" style="max-height: 500px; overflow-y: auto;">
+        <button class="copy-btn" onclick="copy('full-code')">Copy Full Script</button>
+        <pre id="full-code"><span class="f">require</span>(<span class="s">'dotenv'</span>).<span class="f">config</span>();
 <span class="k">const</span> { default: makeWASocket, useMultiFileAuthState, fetchLatestBaileysVersion, makeCacheableSignalKeyStore } = <span class="f">require</span>(<span class="s">"@whiskeysockets/baileys"</span>);
 <span class="k">const</span> pino = <span class="f">require</span>(<span class="s">'pino'</span>);
 <span class="k">const</span> fs = <span class="f">require</span>(<span class="s">'fs-extra'</span>);
@@ -211,7 +211,8 @@
         logger: <span class="f">pino</span>({ level: <span class="s">'silent'</span> }),
         
         <span class="c">// 🔥 CRITICAL CONFIGS 🔥</span>
-        browser: [<span class="s">"Ubuntu"</span>, <span class="s">"Chrome"</span>, <span class="s">"20.0.04"</span>],
+        <span class="c" style="color: #ff4d4d; font-weight: bold;">// ⚠️ DO NOT CHANGE BROWSER CONFIG BELOW ⚠️</span>
+        <span style="background-color: rgba(255, 77, 77, 0.2); border-radius: 4px; padding: 2px;">browser: [<span class="s">"Ubuntu"</span>, <span class="s">"Chrome"</span>, <span class="s">"20.0.04"</span>],</span>
         syncFullHistory: <span class="k">false</span>,
         markOnlineOnConnect: <span class="k">false</span>,
         connectTimeoutMs: 60000,
@@ -224,10 +225,48 @@
         <span class="k">if</span> (connection === <span class="s">'open'</span>) console.<span class="f">log</span>(<span class="s">"✅ Bot Connected!"</span>);
         <span class="k">else if</span> (connection === <span class="s">'close'</span>) <span class="f">setTimeout</span>(startBot, 3000);
     });
+
+    <span class="c">// 3. Msg Upsert & Auto Status Read</span>
+    sock.ev.<span class="f">on</span>(<span class="s">'messages.upsert'</span>, <span class="k">async</span> ({ messages, type }) => {
+        <span class="k">if</span> (type !== <span class="s">'notify'</span>) <span class="k">return</span>;
+        <span class="k">const</span> msg = messages;
+        <span class="k">if</span> (!msg.message) <span class="k">return</span>;
+
+        <span class="c">// Auto Read Status</span>
+        <span class="k">if</span> (msg.key.remoteJid === <span class="s">'status@broadcast'</span>) {
+            <span class="k">await</span> sock.<span class="f">readMessages</span>([msg.key]);
+            <span class="k">return</span>;
+        }
+
+        <span class="c">// Ignore self msg</span>
+        <span class="k">if</span> (msg.key.fromMe) <span class="k">return</span>;
+
+        <span class="k">const</span> text = msg.message.conversation || msg.message.extendedTextMessage?.text || msg.message.imageMessage?.caption || <span class="s">''</span>;
+        <span class="k">if</span> (!text) <span class="k">return</span>;
+        
+        <span class="k">const</span> lowerCaseText = text.<span class="f">toLowerCase</span>().<span class="f">trim</span>();
+        <span class="k">const</span> from = msg.key.remoteJid;
+
+        <span class="c">// Auto Replies (English Assistant)</span>
+        <span class="k">const</span> autoReplies = [
+            { k: [<span class="s">'hi'</span>,<span class="s">'hello'</span>,<span class="s">'hey'</span>,<span class="s">'good morning'</span>,<span class="s">'good evening'</span>,<span class="s">'good night'</span>,<span class="s">'greetings'</span>,<span class="s">'hola'</span>,<span class="s">'bot'</span>,<span class="s">'morning'</span>], r: <span class="s">"Hello! I am an automated virtual assistant. How may I assist you today? 🤖"</span> },
+            { k: [<span class="s">'are you there'</span>,<span class="s">'online'</span>,<span class="s">'busy'</span>,<span class="s">'available'</span>,<span class="s">'active'</span>,<span class="s">'you there'</span>,<span class="s">'alive'</span>,<span class="s">'here'</span>,<span class="s">'msg danna'</span>,<span class="s">'ko'</span>], r: <span class="s">"I am currently online and active. Please leave your message. ⚙️"</span> },
+            { k: [<span class="s">'thanks'</span>,<span class="s">'thank you'</span>,<span class="s">'thnx'</span>,<span class="s">'tnx'</span>,<span class="s">'appreciate'</span>,<span class="s">'thankz'</span>,<span class="s">'good job'</span>,<span class="s">'perfect'</span>,<span class="s">'awesome'</span>,<span class="s">'great'</span>], r: <span class="s">"You're very welcome! If you require any further assistance, please do not hesitate to ask. ✨"</span> },
+            { k: [<span class="s">'help'</span>,<span class="s">'support'</span>,<span class="s">'menu'</span>,<span class="s">'commands'</span>,<span class="s">'cmd'</span>,<span class="s">'list'</span>,<span class="s">'details'</span>,<span class="s">'info'</span>,<span class="s">'assist'</span>,<span class="s">'how to'</span>], r: <span class="s">"I am here to help. You can use the '.menu' command to view my capabilities. 📋"</span> },
+            { k: [<span class="s">'joke'</span>,<span class="s">'funny'</span>,<span class="s">'haha'</span>,<span class="s">'lol'</span>,<span class="s">'boring'</span>,<span class="s">'fun'</span>,<span class="s">'lmao'</span>,<span class="s">'bored'</span>,<span class="s">'hehe'</span>,<span class="s">'smile'</span>], r: <span class="s">"As an AI, I don't experience emotions, but I am equipped to handle your tasks efficiently! 💼"</span> }
+        ];
+
+        <span class="k">for</span> (<span class="k">const</span> item <span class="k">of</span> autoReplies) {
+            <span class="k">if</span> (item.k.<span class="f">some</span>(kw => lowerCaseText.<span class="f">includes</span>(kw))) {
+                <span class="k">await</span> sock.<span class="f">sendMessage</span>(from, { text: item.r }, { quoted: msg });
+                <span class="k">break</span>;
+            }
+        }
+    });
 }
 <span class="f">startBot</span>();</pre>
-            </div>
-        </section>
+    </div>
+</section>
     </main>
 
     <footer class="bg-black/40 border-t border-white/5 py-8 text-center text-slate-500 text-sm">
