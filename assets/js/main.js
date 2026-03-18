@@ -1,15 +1,17 @@
 // assets/js/main.js
 
 const socket = io(CONFIG.BACKEND_URL);
+let isTiltEnabled = true; 
 
-// --- 1. ලයිබ්‍රරි එක Initialize කරන කොටස (ෆයිල් එක මුලටම දාන්න) ---
+// --- 1. ලයිබ්‍රරි එක Initialize කරන කොටස ---
 let iti; 
 document.addEventListener("DOMContentLoaded", () => {
     const phoneInput = document.querySelector("#phone");
     if (phoneInput) {
         iti = window.intlTelInput(phoneInput, {
-            initialCountry: "lk", // මුලින්ම ලංකාව පෙන්වන්න
+            initialCountry: "lk",
             separateDialCode: true,
+            dropdownContainer: document.body, 
             utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js",
         });
     }
@@ -39,6 +41,16 @@ function showToast(message, type = 'info') {
 function switchTab(t) {
     document.querySelectorAll('.t-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+    
+    isTiltEnabled = true; // Tab මාරු කරද්දී ආයේ Tilt එක වැඩ කරන්න දෙනවා
+
+    const pairBtn = document.getElementById('pair-btn');
+    if (pairBtn) {
+        pairBtn.innerHTML = 'GET PAIRING CODE <i class="fa-solid fa-arrow-right"></i>';
+        pairBtn.style.background = ""; 
+        pairBtn.onclick = validateAndPair; 
+    }
+
     if(t === 'qr') {
         document.querySelectorAll('.t-btn')[0].classList.add('active');
         document.getElementById('qr-view').classList.add('active');
@@ -50,6 +62,7 @@ function switchTab(t) {
 
 // --- QR Logic ---
 function startQR() {
+    isTiltEnabled = true; // වැඩේ පටන් ගද්දි හෙලවෙන්න දෙනවා
     const qrContainer = document.getElementById('qr-container');
     const btn = document.getElementById('qr-btn');
     
@@ -61,25 +74,27 @@ function startQR() {
 }
 
 socket.on('qr', (data) => {
+    isTiltEnabled = false; // 🔥 QR එක ආව ගමන් හෙලවෙන එක නවත්තනවා
+    const card = document.getElementById('tilt-card');
+    if(card) card.style.transform = "none"; 
+
     const qrContainer = document.getElementById('qr-container');
     qrContainer.innerHTML = ""; 
     new QRCode(qrContainer, { text: data.qr, width: 200, height: 200 });
     showToast("Scan this QR Code via WhatsApp", "success");
 });
 
-// --- 2. මෙන්න මෙතන තමයි වැදගත්ම වෙනස (Paring Logic) ---
+// --- Pairing Logic ---
 function validateAndPair() {
-    const resBox = document.getElementById('code-result');
-    const btn = document.getElementById('pair-btn');
-
-    // නම්බර් එකේ දිග සහ රට නිවැරදිද කියලා බලනවා
     if (!iti.isValidNumber()) {
         showToast("Invalid phone number for the selected country!", "error");
         return;
     }
 
-    // රටේ කෝඩ් එකත් එක්ක සම්පූර්ණ නම්බර් එක ගන්නවා (උදා: 94761234567)
+    isTiltEnabled = true; // වැඩේ පටන් ගද්දි හෙලවෙන්න දෙනවා
     const fullNumber = iti.getNumber().replace('+', ''); 
+    const resBox = document.getElementById('code-result');
+    const btn = document.getElementById('pair-btn');
 
     resBox.style.display = 'block';
     resBox.innerText = "CONNECTING...";
@@ -87,21 +102,43 @@ function validateAndPair() {
     btn.disabled = true;
 
     showToast("Requesting Pairing Code...", "info");
-    
-    // සර්වර් එකට Clean කරපු නම්බර් එක යවනවා
     socket.emit('start-session', { usePairingCode: true, phoneNumber: fullNumber });
 }
 
 socket.on('pairing-code', (data) => {
+    isTiltEnabled = false; // 🔥 Code එක ආව ගමන් හෙලවෙන එක නවත්තනවා
+    const card = document.getElementById('tilt-card');
+    if(card) card.style.transform = "none"; // කාඩ් එක flat කරනවා
+
     const resBox = document.getElementById('code-result');
+    const btn = document.getElementById('pair-btn');
+
     resBox.innerText = data.code;
     resBox.style.color = "#4ade80";
     resBox.style.fontSize = "1.5rem";
     resBox.style.fontWeight = "bold";
-    showToast("Code Received!", "success");
+
+    btn.disabled = false; 
+    btn.innerHTML = 'COPY CODE <i class="fa-solid fa-copy"></i>';
+    btn.style.background = "linear-gradient(135deg, #25D366 0%, #128C7E 100%)"; 
+    btn.onclick = () => copyCode(data.code);
+
+    showToast("Code Received! Click to Copy.", "success");
 });
 
+// --- Copy Function ---
+function copyCode(code) {
+    navigator.clipboard.writeText(code).then(() => {
+        const btn = document.getElementById('pair-btn');
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = 'COPIED! <i class="fa-solid fa-check"></i>';
+        showToast("Code copied to clipboard!", "success");
+        setTimeout(() => { btn.innerHTML = originalHTML; }, 2000);
+    });
+}
+
 socket.on('session-success', (data) => {
+    isTiltEnabled = false; // සාර්ථක වුණාම හෙලවීම නවත්වනවා
     document.getElementById('qr-view').style.display = 'none';
     document.getElementById('pair-view').style.display = 'none';
     document.getElementById('success-msg').style.display = 'block';
@@ -121,10 +158,11 @@ socket.on('error', (data) => {
     document.getElementById('pair-btn').disabled = false;
 });
 
-// --- 3D Tilt Effect ---
+// --- 3D Tilt Effect (අලුත් කරපු කොටස) ---
 document.addEventListener('mousemove', (e) => {
     const card = document.getElementById('tilt-card');
-    if(card) {
+
+    if(card && isTiltEnabled) { 
         const x = (window.innerWidth / 2 - e.pageX) / 30;
         const y = (window.innerHeight / 2 - e.pageY) / 30;
         card.style.transform = `rotateX(${y}deg) rotateY(${-x}deg)`;

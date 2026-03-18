@@ -8,7 +8,7 @@ async function connectToDatabase() {
 }
 
 module.exports = async (req, res) => {
-    // 1. CORS Headers (ඕනම තැනක ඉඳන් ගන්න පුළුවන් වෙන්න)
+    // 1. CORS Headers 
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
     res.setHeader('Content-Type', 'application/json');
@@ -40,14 +40,7 @@ module.exports = async (req, res) => {
             return res.status(404).json({ success: false, message: "No matching session found" });
         }
 
-        // ============================================================
-        // 🔥 CORRECT LOGIC  🔥
-        // ============================================================
-        
-        // Database Screenshot එකේ හැටියට 'me', 'platform', 'account'
-        // ඔක්කොම තියෙන්නේ 'creds' ඇතුලේ. ඒ නිසා 'creds' විතරක් යැව්වම ඇති.
-        // එතකොට හරියටම 1creds.json එක වගේම ෆයිල් එකක් ලැබෙනවා.
-        
+    
         return res.status(200).json(session.creds);
 
     } catch (error) {
