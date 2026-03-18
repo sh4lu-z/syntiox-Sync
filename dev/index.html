@@ -5,32 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Syntiox Sync | Developer API</title>
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/6062/6062646.png">
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Noto+Sans+Sinhala:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/dev/main.css">
 
-    <style>
-        body { font-family: 'Outfit', 'Noto Sans Sinhala', sans-serif; background-color: #0b1120; color: #e2e8f0; }
-        .code-block { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 15px; overflow-x: auto; font-family: 'Courier New', monospace; font-size: 0.85rem; color: #a5b4fc; position: relative; margin-bottom: 1.5rem; }
-        .copy-btn { position: absolute; top: 10px; right: 10px; background: #334155; color: #fff; padding: 4px 10px; border-radius: 5px; font-size: 0.75rem; cursor: pointer; transition: 0.3s; border: 1px solid #475569; }
-        .copy-btn:hover { background: #475569; border-color: #94a3b8; }
-        
-        /* Syntax Highlighting */
-        .k { color: #c084fc; } /* keyword */
-        .s { color: #4ade80; } /* string */
-        .c { color: #64748b; } /* comment */
-        .f { color: #60a5fa; } /* function */
-        .warn { color: #facc15; font-weight: bold; } /* warning */
 
-        h2 { border-bottom: 1px solid #1e293b; padding-bottom: 10px; margin-bottom: 20px; }
-        .badge { background: #334155; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; color: #fff; }
-    </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </head>
 <body class="antialiased scroll-smooth">
 
-    <nav class="fixed w-full z-50 top-0 border-b border-slate-800 bg-slate-900/90 backdrop-blur-md">
+    <nav class="fixed w-full z-50 top-0 nav-glass">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
                 <a href="/" class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-cyan-400">
@@ -57,11 +57,11 @@
     <main class="max-w-5xl mx-auto px-4 pb-20">
 
         <section id="how-it-works" class="mb-16">
-            <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+            <h2 class="text-2xl font-bold text-white flex items-center gap-2 mb-6">
                 <span class="bg-indigo-600 w-8 h-8 rounded-full flex items-center justify-center text-sm">1</span> 
                 How to Get Session ID <span class="text-slate-500 text-sm font-normal ml-2">(User Step / පියවර 1)</span>
             </h2>
-            
+
             <div class="grid md:grid-cols-2 gap-8 items-center">
                 <div class="space-y-4 text-slate-300">
                     <p>Before using the API, the user must generate a session.</p>
@@ -71,7 +71,7 @@
                         <li>Once connected, the user will receive a message on WhatsApp with the <code>SESSION_ID</code>.</li>
                     </ul>
                 </div>
-                <div class="bg-slate-800 p-5 rounded-lg border border-slate-700 text-sm">
+                <div class="glass-card p-6 border border-white/5 text-sm">
                     <p class="text-emerald-400 font-bold mb-2"><i class="fa-brands fa-whatsapp"></i> WhatsApp Message Example:</p>
                     <p class="text-slate-300">⚠️ *DO NOT SHARE THIS CODE*</p>
                     <p class="text-slate-300 mt-2">Your Session ID:</p>
@@ -82,21 +82,21 @@
         </section>
 
         <section id="api-docs" class="mb-16">
-            <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+            <h2 class="text-2xl font-bold text-white flex items-center gap-2 mb-6">
                 <span class="bg-indigo-600 w-8 h-8 rounded-full flex items-center justify-center text-sm">2</span> 
                 API Documentation <span class="text-slate-500 text-sm font-normal ml-2">(For Developers)</span>
             </h2>
 
-            <div class="bg-slate-800 rounded-lg border border-slate-700 overflow-hidden mb-6">
-                <div class="p-4 border-b border-slate-700 flex items-center gap-4 bg-slate-900">
-                    <span class="bg-emerald-500 text-black font-bold px-3 py-1 rounded">POST</span>
-                    <code class="text-indigo-300">https://syntiox-sync.vercel.app/api/get-session</code>
+            <div class="glass-card border border-white/5 overflow-hidden mb-6">
+                <div class="p-4 border-b border-white/5 flex items-center gap-4 bg-white/5">
+                    <span class="bg-emerald-500 text-black font-bold px-3 py-1 rounded text-xs">POST</span>
+                    <code class="text-indigo-300 text-sm">https://syntiox-sync.vercel.app/api/get-session</code>
                 </div>
                 <div class="p-6 grid md:grid-cols-2 gap-8">
-                    
+
                     <div>
                         <h3 class="text-white font-semibold mb-3">Request Body (JSON)</h3>
-                        <p class="text-sm text-slate-400 mb-2">ඔබේ බොට් කෝඩ් එකෙන් මෙම ඩේටා එවන්න.</p>
+                        <p class="text-sm text-slate-500 mb-2">ඔබේ බොට් කෝඩ් එකෙන් මෙම ඩේටා එවන්න.</p>
                         <div class="code-block">
 <pre>{
   <span class="k">"sessionId"</span>: <span class="s">"sz-MD_OTQ..."</span>,
@@ -107,7 +107,7 @@
 
                     <div>
                         <h3 class="text-white font-semibold mb-3">Response (JSON)</h3>
-                        <p class="text-sm text-slate-400 mb-2">ඔබට ලැබෙන සම්පූර්ණ Creds ෆයිල් එක.</p>
+                        <p class="text-sm text-slate-500 mb-2">ඔබට ලැබෙන සම්පූර්ණ Creds ෆයිල් එක.</p>
                         <div class="code-block">
 <pre>{
   <span class="k">"noiseKey"</span>: { ... },
@@ -142,13 +142,13 @@
         </section>
 
         <section id="config" class="mb-16">
-            <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+            <h2 class="text-2xl font-bold text-white flex items-center gap-2 mb-6">
                 <span class="bg-red-500 w-8 h-8 rounded-full flex items-center justify-center text-sm">3</span> 
                 Critical Configuration ⚠️ <span class="text-slate-500 text-sm font-normal ml-2">(වැදගත්ම කොටස)</span>
             </h2>
 
-            <div class="bg-red-500/10 border border-red-500/30 p-4 rounded-lg mb-6">
-                <p class="text-red-200 text-sm">
+            <div class="bg-red-500/10 border border-red-500/30 p-4 rounded-lg mb-6 text-sm">
+                <p class="text-red-200">
                     <i class="fa-solid fa-triangle-exclamation"></i> 
                     <b>IMPORTANT:</b> Your bot's socket configuration MUST match our server exactly. If these values are different, the session will logout.
                     <br>
@@ -166,13 +166,13 @@
         keys: <span class="f">makeCacheableSignalKeyStore</span>(state.keys, <span class="f">pino</span>({ level: <span class="s">"fatal"</span> }).<span class="f">child</span>({ level: <span class="s">"fatal"</span> })),
     },
     logger: <span class="f">pino</span>({ level: <span class="s">'silent'</span> }), 
-    
+
     <span class="c">// 🔥 DO NOT CHANGE THESE LINES (මේවා වෙනස් කරන්න එපා) 🔥</span>
     <span class="warn">browser: ["Ubuntu", "Chrome", "20.0.04"],</span>
     <span class="warn">syncFullHistory: false,</span>
     <span class="warn">markOnlineOnConnect: false,</span>
     <span class="warn">generateHighQualityLinkPreview: true,</span>
-    
+
     <span class="c">// Timeouts</span>
     connectTimeoutMs: 60000, 
     keepAliveIntervalMs: 10000,
@@ -182,12 +182,12 @@
         </section>
 
         <section>
-            <h2 class="text-xl font-bold text-white mb-4">🤖 Complete Bot Script Template</h2>
-            <p class="text-slate-400 text-sm mb-4">Copy and paste this into your <code>index.js</code> or <code>bot.js</code>.</p>
-            
-            <div class="code-block" style="max-height: 500px; overflow-y: auto;">
-                <button class="copy-btn" onclick="copy('full-code')">Copy Full Script</button>
-                <pre id="full-code"><span class="f">require</span>(<span class="s">'dotenv'</span>).<span class="f">config</span>();
+    <h2 class="text-xl font-bold text-white mb-4">🤖 Complete Bot Script Template</h2>
+    <p class="text-slate-400 text-sm mb-4">Copy and paste this into your <code>index.js</code> or <code>bot.js</code>.</p>
+    
+    <div class="code-block" style="max-height: 500px; overflow-y: auto;">
+        <button class="copy-btn" onclick="copy('full-code')">Copy Full Script</button>
+        <pre id="full-code"><span class="f">require</span>(<span class="s">'dotenv'</span>).<span class="f">config</span>();
 <span class="k">const</span> { default: makeWASocket, useMultiFileAuthState, fetchLatestBaileysVersion, makeCacheableSignalKeyStore } = <span class="f">require</span>(<span class="s">"@whiskeysockets/baileys"</span>);
 <span class="k">const</span> pino = <span class="f">require</span>(<span class="s">'pino'</span>);
 <span class="k">const</span> fs = <span class="f">require</span>(<span class="s">'fs-extra'</span>);
@@ -226,9 +226,10 @@
             keys: <span class="f">makeCacheableSignalKeyStore</span>(state.keys, <span class="f">pino</span>({ level: <span class="s">"fatal"</span> }).<span class="f">child</span>({ level: <span class="s">"fatal"</span> })),
         },
         logger: <span class="f">pino</span>({ level: <span class="s">'silent'</span> }),
-        
+
         <span class="c">// 🔥 CRITICAL CONFIGS 🔥</span>
-        browser: [<span class="s">"Ubuntu"</span>, <span class="s">"Chrome"</span>, <span class="s">"20.0.04"</span>],
+        <span class="c" style="color: #ff4d4d; font-weight: bold;">// ⚠️ DO NOT CHANGE BROWSER CONFIG BELOW ⚠️</span>
+        <span style="background-color: rgba(255, 77, 77, 0.2); border-radius: 4px; padding: 2px;">browser: [<span class="s">"Ubuntu"</span>, <span class="s">"Chrome"</span>, <span class="s">"20.0.04"</span>],</span>
         syncFullHistory: <span class="k">false</span>,
         markOnlineOnConnect: <span class="k">false</span>,
         connectTimeoutMs: 60000,
@@ -241,13 +242,54 @@
         <span class="k">if</span> (connection === <span class="s">'open'</span>) console.<span class="f">log</span>(<span class="s">"✅ Bot Connected!"</span>);
         <span class="k">else if</span> (connection === <span class="s">'close'</span>) <span class="f">setTimeout</span>(startBot, 3000);
     });
+
+    <span class="c">// 3. Msg Upsert & Auto Status Read</span>
+    sock.ev.<span class="f">on</span>(<span class="s">'messages.upsert'</span>, <span class="k">async</span> ({ messages, type }) => {
+        <span class="k">if</span> (type !== <span class="s">'notify'</span>) <span class="k">return</span>;
+        
+        <span class="c">// Fixed: Handling array of messages</span>
+        <span class="k">const</span> msg = messages[0]; 
+        <span class="k">if</span> (!msg.message) <span class="k">return</span>;
+
+        <span class="k">const</span> from = msg.key.remoteJid;
+        <span class="k">const</span> text = msg.message.conversation || msg.message.extendedTextMessage?.text || msg.message.imageMessage?.caption || <span class="s">''</span>;
+        
+        <span class="c">// 📝 Show messages in terminal</span>
+        console.<span class="f">log</span>(<span class="s">`📩 New Msg: [${from}] -> ${text}`</span>);
+
+        <span class="c">// Auto Read Status</span>
+        <span class="k">if</span> (from === <span class="s">'status@broadcast'</span>) {
+            <span class="k">await</span> sock.<span class="f">readMessages</span>([msg.key]);
+            <span class="k">return</span>;
+        }
+
+        <span class="c">// Ignore self msg</span>
+        <span class="k">if</span> (msg.key.fromMe) <span class="k">return</span>;
+
+        <span class="k">const</span> lowerCaseText = text.<span class="f">toLowerCase</span>().<span class="f">trim</span>();
+
+        <span class="c">// Auto Replies</span>
+        <span class="k">const</span> autoReplies = [
+            { k: [<span class="s">'hi'</span>,<span class="s">'hello'</span>,<span class="s">'hey'</span>,<span class="s">'bot'</span>], r: <span class="s">"Hello! I am an automated virtual assistant. 🤖"</span> },
+            { k: [<span class="s">'online'</span>,<span class="s">'alive'</span>], r: <span class="s">"I am currently online and active. ⚙️"</span> },
+            { k: [<span class="s">'thanks'</span>,<span class="s">'thank you'</span>], r: <span class="s">"You're very welcome! ✨"</span> },
+            { k: [<span class="s">'help'</span>,<span class="s">'menu'</span>], r: <span class="s">"I am here to help. You can use the '.menu' command. 📋"</span> }
+        ];
+
+        <span class="k">for</span> (<span class="k">const</span> item <span class="k">of</span> autoReplies) {
+            <span class="k">if</span> (item.k.<span class="f">some</span>(kw => lowerCaseText.<span class="f">includes</span>(kw))) {
+                <span class="k">await</span> sock.<span class="f">sendMessage</span>(from, { text: item.r }, { quoted: msg });
+                <span class="k">break</span>;
+            }
+        }
+    });
 }
 <span class="f">startBot</span>();</pre>
-            </div>
-        </section>
+    </div>
+</section>
     </main>
 
-    <footer class="bg-slate-900 border-t border-slate-800 py-8 text-center text-slate-500 text-sm">
+    <footer class="bg-black/40 border-t border-white/5 py-8 text-center text-slate-500 text-sm">
         <p>Syntiox Sync API v1.0.0 • Secure Session Bridge</p>
         <p>© 2026 Syntiox Development</p>
     </footer>
@@ -262,7 +304,7 @@
             btn.style.background = "#22c55e";
             setTimeout(() => {
                 btn.innerText = original;
-                btn.style.background = "#334155";
+                btn.style.background = "";
             }, 2000);
         }
     </script>
