@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYNTIOX SYNC </title>
+    <title>SYNTIOX SYNC</title>
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/6062/6062646.png">
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
@@ -11,8 +11,15 @@
     
     <link rel="stylesheet" href="assets/css/style.css">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css" />
+
     <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js"></script>
+
+
 </head>
 <body>
     <div class="mesh-bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
@@ -39,10 +46,13 @@
 
         <div id="pair-view" class="view-section">
             <div style="text-align: left; margin-bottom: 5px; font-size: 0.75rem; color: var(--text-mute); margin-left: 5px;">SELECT COUNTRY & NUMBER</div>
-               <input type="tel" class="aura-input" id="phone"> 
-                       <button class="action-btn" onclick="validateAndPair()" id="pair-btn">
-                         GET PAIRING CODE <i class="fa-solid fa-arrow-right"></i>
-                      </button>
+            
+            <input type="tel" class="aura-input" id="phone"> 
+            
+            <button class="action-btn" onclick="validateAndPair()" id="pair-btn">
+                GET PAIRING CODE <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            
             <div id="code-result" class="code-res">...</div>
         </div>
 
@@ -63,11 +73,11 @@
     </div>
 
     <p class="copyright">
-                &copy; 2026 Syntiox Organization. All Rights Reserved.
-            </p>
+        &copy; 2026 Syntiox Organization. All Rights Reserved.
+    </p>
 
     <script src="config.js"></script>
     <script src="assets/js/main.js"></script>
-    <script src="api/get-session.js"></script>
-</body>
+    
+    </body>
 </html>
